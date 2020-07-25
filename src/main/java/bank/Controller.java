@@ -87,12 +87,10 @@ public class Controller {
             //TODO send succes
             // sendToClient();
         } catch (TokenExpiredException e) {
-            e.printStackTrace();
+            sendToClient("token expired");
         } catch (InvalidTokenException e) {
-            e.printStackTrace();
+            sendToClient("token is invalid");
         }
-
-
     }
 
     public void getTransaction(String token, String transactionType) {
@@ -104,6 +102,19 @@ public class Controller {
     }
 
     public void getBalance(String token) {
+        try {
+            isTokenValid(token);
+            User user = getUserByToken(token);
+            if (user == null) {
+                sendToClient(ErrorTypes.token_is_invalid.getErrorMessage());
+                return;
+            }
+            sendToClient("" + user.getCredit());
+        } catch (TokenExpiredException e) {
+            e.printStackTrace();
+        } catch (InvalidTokenException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -141,7 +152,5 @@ public class Controller {
         if (tokenStatus == Session.tokenStatus.Invalid)
             throw new InvalidTokenException();
         return true;
-
-        //TODO
     }
 }

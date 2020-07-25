@@ -8,7 +8,7 @@ public class Receipt {
     private String destId;
     private String description;
 
-    public Receipt(Receipt_type receipt_type, long money, String sourceId, String destId,String description) {
+    public Receipt(Receipt_type receipt_type, long money, String sourceId, String destId, String description) {
         this.receipt_type = receipt_type;
         this.money = money;
         this.sourceId = sourceId;
@@ -25,7 +25,7 @@ public class Receipt {
         this.receipt_type = receipt_type;
     }
 
-    public int getMoney() {
+    public long getMoney() {
         return money;
     }
 
