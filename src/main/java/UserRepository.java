@@ -35,7 +35,7 @@ public class UserRepository implements Repository<User> {
         } else {
             File file = new File("\\database\\users");
             Files.writeString(Paths.get(file.toPath() + "\\" + user.getAccountNumber()), gson.toJson(user));
-            allUsers.put(user,file);
+            allUsers.put(user, file);
         }
     }
 
@@ -73,7 +73,7 @@ public class UserRepository implements Repository<User> {
 
     public User getUserByUsername(String username) {
         for (User user : allUsers.keySet()) {
-            if(user.getUsername().equals(username))
+            if (user.getUsername().equals(username))
                 return user;
         }
         return null;
@@ -81,7 +81,7 @@ public class UserRepository implements Repository<User> {
 
     public User getUserByAccountId(int accountId) {
         for (User user : allUsers.keySet()) {
-            if(user.getAccountNumber() == accountId)
+            if (user.getAccountNumber() == accountId)
                 return user;
         }
         return null;
