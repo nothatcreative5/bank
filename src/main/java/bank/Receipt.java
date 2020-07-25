@@ -4,26 +4,19 @@ public class Receipt {
 
     private Receipt_type receipt_type;
     private long money;
-    private String sourceId;
-    private String destId;
+    private int sourceId;
+    private int destId;
     private String description;
-    private boolean paid ;
+    private int receiptId;
 
-    public Receipt(Receipt_type receipt_type, long money, String sourceId, String destId, String description) {
+    public Receipt(Receipt_type receipt_type, long money, int sourceId, int destId, String description) {
         this.receipt_type = receipt_type;
         this.money = money;
         this.sourceId = sourceId;
         this.destId = destId;
         this.description = description;
-        paid = false;
-    }
-    public boolean getPaid(){
-        return paid;
     }
 
-    public void setPaid(boolean paid) {
-        this.paid = paid;
-    }
 
     public Receipt_type getReceipt_type() {
         return receipt_type;
@@ -41,19 +34,19 @@ public class Receipt {
         this.money = money;
     }
 
-    public String getSourceId() {
+    public int getSourceId() {
         return sourceId;
     }
 
-    public void setSourceId(String sourceId) {
+    public void setSourceId(int sourceId) {
         this.sourceId = sourceId;
     }
 
-    public String getDestId() {
+    public int getDestId() {
         return destId;
     }
 
-    public void setDestId(String destId) {
+    public void setDestId(int destId) {
         this.destId = destId;
     }
 
@@ -63,5 +56,13 @@ public class Receipt {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getReceiptId() {
+        return this.receiptId;
+    }
+
+    public void setReceiptId(int receiptId) {
+        this.receiptId = receiptId;
     }
 }

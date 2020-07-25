@@ -95,7 +95,7 @@ public class Controller {
     }
 
     public void getTransaction(String token, String transactionType) {
-
+        isTokenValid(token);
     }
 
     public void pay(int id) throws IOException {
