@@ -1,4 +1,8 @@
+import com.google.gson.Gson;
+
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +16,11 @@ public class UserRepository implements Repository<User> {
         readFiles();
     }
 
-    public void save(User Object) {
-
+    public void save(User user) throws IOException {
+        allUsers.add(user);
+        File file = new File("\\database\\users");
+        Gson gson = new Gson();
+        Files.writeString(file.toPath(), gson.toJson(user));
     }
 
 
@@ -27,11 +34,19 @@ public class UserRepository implements Repository<User> {
 
     private void readFiles() {
         List<File> files =  Arrays.asList(loadFolder("\\database\\users"));
-        files.forEach(e -> readEachUser(e));
+        files.forEach(e -> {
+            try {
+                readEachUser(e);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
     }
 
-    private void readEachUser(File file) {
-        User user = Gson
+    private void readEachUser(File file) throws IOException {
+        Gson gson = new Gson();
+        User user = gson.fromJson(Files.readString(file.toPath()), User.class);
+        allUsers.add(user);
     }
 
 }
