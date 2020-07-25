@@ -113,6 +113,14 @@ public class ReceiptRepository implements Repository<Receipt> {
         return stringBuilder.toString();
     }
 
+    private Receipt getReceiptById(int id) {
+        for (Receipt receipt : allReceipts.keySet()) {
+            if(receipt.getReceiptId() == id)
+                return receipt;
+        }
+        return null;
+    }
+
 
     private void readEachUser(File file) throws IOException {
         Gson gson = new Gson();
