@@ -15,12 +15,16 @@ public class Controller {
         this.clientSocket = clientSocket;
     }
 
-    public void createAccount(String firstName, String lastName, String userName ,String password, String repeatedPassword) {
+    public void createAccount(String firstName, String lastName, String userName, String password, String repeatedPassword) {
+        synchronized ()
         User user = getUserByUserName(userName);
-        if(user != null){
-            sendToClient(ErrorTypes.);
+        if (user != null) {
+            sendToClient(ErrorTypes.username_is_taken.getErrorMessage());
         }
-
+        if (!password.equals(repeatedPassword)) {
+            sendToClient(ErrorTypes.password_not_matches.getErrorMessage());
+        }
+        User newUser = new User(userName, password, firstName, lastName, 0);
 
     }
 
@@ -56,7 +60,8 @@ public class Controller {
     private User getUserByAccountId(int accountId) {
         return null;
     }
-    private User getUserByUserName(String userName){
+
+    private User getUserByUserName(String userName) {
 
     }
 

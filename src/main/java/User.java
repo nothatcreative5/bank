@@ -5,9 +5,9 @@ public class User {
     private String firstName;
     private String lastName;
     private int accountNumber;
-    private int credit;
+    private long credit;
 
-    public User(String username, String password, String firstName, String lastName, int credit) {
+    public User(String username, String password, String firstName, String lastName, long credit) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -48,7 +48,7 @@ public class User {
         this.lastName = lastName;
     }
 
-    public int getCredit() {
+    public long getCredit() {
         return credit;
     }
 
