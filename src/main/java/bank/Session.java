@@ -1,3 +1,5 @@
+package bank;
+
 import java.util.*;
 
 public class Session {
@@ -7,7 +9,7 @@ public class Session {
     private static List<String> expiredTokens;
     private static Map<String, String> allTokens; //Token first Username second
 
-    private enum tokenStatus {Invalid, Expired, Fine}
+    public enum tokenStatus {Invalid, Expired, Fine}
 
     static {
         tokenCount = 1;

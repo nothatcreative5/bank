@@ -1,3 +1,5 @@
+package bank;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,7 +11,7 @@ public class Client extends Thread {
     private DataInputStream dateInputStream;
     private Controller controller;
 
-    public Client(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket, Object lock) {
+    public Client(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket, Object lock) throws IOException {
         this.dateInputStream = dataInputStream;
         controller = new Controller(dataOutputStream, dataInputStream, clientSocket, lock);
     }
@@ -24,7 +26,7 @@ public class Client extends Thread {
         }
     }
 
-    private void commandProcess(String command) {
+    private void commandProcess(String command) throws IOException {
         if (command.matches(Constants.CREATE_ACCOUNT)) {
             Matcher matcher = Pattern.compile(Constants.CREATE_ACCOUNT).matcher(command);
             matcher.find();

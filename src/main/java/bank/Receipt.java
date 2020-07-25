@@ -1,18 +1,19 @@
-import java.io.Reader;
+package bank;
 
 public class Receipt {
 
     private Receipt_type receipt_type;
-    private int money;
+    private long money;
     private String sourceId;
     private String destId;
     private String description;
 
-    public Receipt(Receipt_type receipt_type, int money, String sourceId, String destId) {
+    public Receipt(Receipt_type receipt_type, long money, String sourceId, String destId,String description) {
         this.receipt_type = receipt_type;
         this.money = money;
         this.sourceId = sourceId;
         this.destId = destId;
+        this.description = description;
     }
 
 
