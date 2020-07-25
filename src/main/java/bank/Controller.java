@@ -146,33 +146,33 @@ public class Controller {
     }
 
     public void withDraw(Receipt receipt) throws IOException {
-        User destUser = getUserByAccountId(receipt.getDestId());
+        User source = getUserByAccountId(receipt.getSourceId());
         long money = receipt.getMoney();
-        if (destUser == null) {
+        if (source == null) {
             sendToClient("invalid account id");
             return;
         }
-        if (destUser.getCredit() <= money) {
+        if (source.getCredit() <= money) {
             sendToClient("dest account does not have enough money");
             return;
         }
-        destUser.setCredit(destUser.getCredit() - money);
+        source.setCredit(source.getCredit() - money);
         receipt.setPaid(true);
-        userRepository.save(destUser);
+        userRepository.save(source);
         receiptRepository.save(receipt);
         sendToClient("done successfully");
     }
 
     public void deposit(Receipt receipt) throws IOException {
-        User sourceUser = getUserByAccountId(receipt.getSourceId());
+        User dest = getUserByAccountId(receipt.getDestId());
         long money = receipt.getMoney();
-        if (sourceUser == null) {
+        if (dest == null) {
             sendToClient("invalid account id");
             return;
         }
-        sourceUser.setCredit(sourceUser.getCredit() + money);
+        dest.setCredit(dest.getCredit() + money);
         receipt.setPaid(true);
-        userRepository.save(sourceUser);
+        userRepository.save(dest);
         receiptRepository.save(receipt);
         sendToClient("done successfully");
     }
