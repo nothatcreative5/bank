@@ -93,7 +93,13 @@ public class ReceiptRepository implements Repository<Receipt> {
     }
 
     private String getAllTransactions(User user) {
-        return sourceTransaction(user) + destTransaction(user);
+        String source = sourceTransaction(user);
+        String dest = destTransaction(user);
+        if (source.length() > 0 && dest.length() > 0) {
+            return source + "*" + dest;
+        }
+        return source + dest;
+
     }
 
     private String sourceTransaction(User user) {
@@ -120,6 +126,9 @@ public class ReceiptRepository implements Repository<Receipt> {
                 stringBuilder.append(gson.toJson(receipt));
                 stringBuilder.append("*");
             }
+        }
+        if (stringBuilder.length() > 0) {
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         }
         return stringBuilder.toString();
     }
