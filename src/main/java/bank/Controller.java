@@ -216,7 +216,7 @@ public class Controller {
     }
 
     public void exit() {
-        sendToClient("done successfully");
+        sendToClient("bye");
 //todo
     }
 
