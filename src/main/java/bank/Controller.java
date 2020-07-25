@@ -46,11 +46,9 @@ public class Controller {
         User user = getUserByUserName(userName);
         if (user == null) {
             sendToClient(ErrorTypes.invalid_password_username.getErrorMessage());
-        }
-        if (!user.getPassword().equals(password)) {
+        } else if (!user.getPassword().equals(password)) {
             sendToClient(ErrorTypes.invalid_password_username.getErrorMessage());
-        }
-        sendToClient(Session.getToken(userName));
+        } else sendToClient(Session.getToken(userName));
     }
 
     public void createReceipt(String token, Receipt_type receiptType, long money, int source, int dest, String description) throws IOException {
