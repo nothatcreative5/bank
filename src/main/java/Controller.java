@@ -15,7 +15,7 @@ public class Controller {
         this.clientSocket = clientSocket;
     }
 
-    public void createAccount(String token, String firstName, String lastName, String password, String repeatedPassword) {
+    public void createAccount(String firstName, String lastName, String userName ,String password, String repeatedPassword) {
 
 
     }
