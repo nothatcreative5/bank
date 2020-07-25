@@ -83,7 +83,7 @@ public class Controller {
                 return;
             }
 
-            Receipt receipt = new Receipt(receiptType, money, source,  dest, description);
+            Receipt receipt = new Receipt(receiptType, money, source, dest, description);
             receiptRepository.save(receipt);
             //TODO send succes
             // sendToClient();
@@ -95,6 +95,7 @@ public class Controller {
     }
 
     public void getTransaction(String token, String transactionType) {
+        if(transactionType)
         try {
             isTokenValid(token);
         } catch (TokenExpiredException e) {
@@ -106,12 +107,12 @@ public class Controller {
 
     public void pay(int id) throws IOException {
         synchronized (payingLock) {
-            Receipt receipt = receiptRepository.getById(id);
+            Receipt receipt = receiptRepository.getReceiptById(id);
             if (receipt == null) {
                 sendToClient("invalid receipt id");
                 return;
             }
-            if (receipt.get()) {
+            if (receipt.getPaid()) {
                 sendToClient("receipt is paid before");
                 return;
             }
@@ -200,7 +201,7 @@ public class Controller {
     }
 
     public void exit(String token) {
-
+//todo
     }
 
     private User getUserByToken(String token) {

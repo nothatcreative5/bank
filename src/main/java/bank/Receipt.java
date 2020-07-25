@@ -70,4 +70,7 @@ public class Receipt {
     public void setReceiptId(int receiptId) {
         this.receiptId = receiptId;
     }
+    public boolean getPaid(){
+        return paid;
+    }
 }

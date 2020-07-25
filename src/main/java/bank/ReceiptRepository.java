@@ -113,7 +113,7 @@ public class ReceiptRepository implements Repository<Receipt> {
         return stringBuilder.toString();
     }
 
-    private Receipt getReceiptById(int id) {
+    public Receipt getReceiptById(int id) {
         for (Receipt receipt : allReceipts.keySet()) {
             if(receipt.getReceiptId() == id)
                 return receipt;
