@@ -3,6 +3,7 @@ package bank;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -31,13 +32,17 @@ public class UserRepository implements Repository<User> {
     @Override
     public synchronized void save(User user) throws IOException {
         Gson gson = new Gson();
-        if (allUsers.keySet().contains(user)) {
-            Files.writeString(Paths.get(allUsers.get(user) + "\\" + user.getAccountNumber()), gson.toJson(user));
+        FileWriter fileWriter;
+        if (getUserByUsername(user.getUsername()) != null) {
+            Files.writeString(allUsers.get(user).toPath(), gson.toJson(user));
         } else {
             File file = new File("database\\users\\" + user.getAccountNumber());
             file.createNewFile();
             Files.writeString(file.toPath(), gson.toJson(user));
             allUsers.put(user, file);
+            for (User user1 : allUsers.keySet()) {
+                System.out.println(user1.getUsername());
+            }
         }
     }
 

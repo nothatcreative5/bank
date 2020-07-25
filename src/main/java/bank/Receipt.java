@@ -16,6 +16,7 @@ public class Receipt {
         this.sourceId = sourceId;
         this.destId = destId;
         this.description = description;
+        this.receiptId = Session.getReceiptNumber();
         paid = false;
     }
 

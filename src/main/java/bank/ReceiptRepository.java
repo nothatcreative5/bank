@@ -32,11 +32,11 @@ public class ReceiptRepository implements Repository<Receipt> {
     @Override
     public synchronized void save(Receipt receipt) throws IOException {
         Gson gson = new Gson();
-        if (allReceipts.keySet().contains(receipt)) {
-            Files.writeString(Paths.get(allReceipts.get(receipt) + "\\" + receipt.getReceiptId()), gson.toJson(receipt));
+        if (getReceiptById(receipt.getReceiptId()) != null) {
+            Files.writeString(allReceipts.get(receipt).toPath(), gson.toJson(receipt));
         } else {
-            File file = new File("\\database\\users");
-            Files.writeString(Paths.get(file.toPath() + "\\" + receipt.getReceiptId()), gson.toJson(receipt));
+            File file = new File("database\\receipts\\" + receipt.getReceiptId());
+            Files.writeString(file.toPath(), gson.toJson(receipt));
             allReceipts.put(receipt, file);
         }
     }
@@ -133,5 +133,9 @@ public class ReceiptRepository implements Repository<Receipt> {
         Gson gson = new Gson();
         Receipt receipt = gson.fromJson(Files.readString(file.toPath()), Receipt.class);
         allReceipts.put(receipt, file);
+    }
+
+    public static int getLatestReceiptNumber() {
+        return receiptNumber;
     }
 }

@@ -6,6 +6,7 @@ public class Session {
 
     static int tokenCount;
     static int accountNumber;
+    static int receiptNumber;
     private static List<String> expiredTokens;
     private static Map<String, String> allTokens; //Token first Username second
 
@@ -14,6 +15,7 @@ public class Session {
     static {
         tokenCount = 1;
         accountNumber = UserRepository.getLatestAccountNumber() + 1;
+        receiptNumber = ReceiptRepository.getLatestReceiptNumber();
         expiredTokens = new ArrayList<>();
         allTokens = new HashMap<>();
     }
@@ -48,6 +50,9 @@ public class Session {
 
     public static int getAccountNumber() {
         return accountNumber++;
+    }
+    public static int getReceiptNumber() {
+        return receiptNumber++;
     }
 
 
