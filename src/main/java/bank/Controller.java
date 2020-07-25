@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Date;
 
 import bank.exception.InvalidTokenException;
 import bank.exception.TokenExpiredException;
@@ -240,6 +241,8 @@ public class Controller {
             dataOutputStream.writeUTF(message);
             dataOutputStream.flush();
             clientSocket.close();
+            System.out.println("server : { " + message + "} at :" + (new Date()).toString());
+            System.out.println("number of client connected " + Session.getAllTokens().size());
         } catch (IOException e) {
             e.printStackTrace();
         }

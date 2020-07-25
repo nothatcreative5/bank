@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,15 +12,16 @@ public class Client extends Thread {
     private DataInputStream dateInputStream;
     private Controller controller;
 
-    public Client(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket, Object lock,Object payingLock) throws IOException {
+    public Client(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket, Object lock, Object payingLock) throws IOException {
         this.dateInputStream = dataInputStream;
-        controller = new Controller(dataOutputStream, dataInputStream, clientSocket, lock,payingLock);
+        controller = new Controller(dataOutputStream, dataInputStream, clientSocket, lock, payingLock);
     }
 
     @Override
     public void run() {
         try {
             String command = dateInputStream.readUTF();
+            System.out.println("client : { " + command + "} at :" + (new Date()).toString());
             commandProcess(command);
         } catch (IOException e) {
             e.printStackTrace();

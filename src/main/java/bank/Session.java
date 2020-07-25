@@ -20,6 +20,10 @@ public class Session {
         allTokens = new HashMap<>();
     }
 
+    public static Map<String, String> getAllTokens() {
+        return allTokens;
+    }
+
     public static synchronized String getToken(String username) {
         String returnValue = "a" + tokenCount;
         allTokens.put(returnValue, username);
