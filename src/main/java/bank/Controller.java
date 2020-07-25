@@ -70,7 +70,7 @@ public class Controller {
                 return;
             }
             User destAccount = getUserByAccountId(dest);
-            if (sourceAccount == null) {
+            if (destAccount == null) {
                 sendToClient("dest account id is invalid");
                 return;
             }
@@ -88,20 +88,40 @@ public class Controller {
             //TODO send succes
             // sendToClient();
         } catch (TokenExpiredException e) {
-            sendToClient("token expired");
+            sendToClient(ErrorTypes.token_expired.getErrorMessage());
         } catch (InvalidTokenException e) {
-            sendToClient("token is invalid");
+            sendToClient(ErrorTypes.token_is_invalid.getErrorMessage());
         }
     }
 
     public void getTransaction(String token, String transactionType) {
-        if(transactionType)
         try {
+            String message = null;
             isTokenValid(token);
+            User user = getUserByToken(token);
+            if (user == null) {
+                sendToClient(ErrorTypes.token_is_invalid.getErrorMessage());
+                return;
+            }
+            try {
+                int receiptId = Integer.parseInt(transactionType);
+                message = receiptRepository.getTransaction(user, transactionType);
+            } catch (NumberFormatException e) {
+                if (!transactionType.equals("+") && !transactionType.equals("-") && !transactionType.equals("*")) {
+                    sendToClient("your input contains invalid characters");
+                    return;
+                }
+                message = receiptRepository.getTransaction(user, transactionType);
+            }
+            if (message == null) {
+                sendToClient("{}");
+                return;
+            }
+            sendToClient(message);
         } catch (TokenExpiredException e) {
-            e.printStackTrace();
+            sendToClient(ErrorTypes.token_expired.getErrorMessage());
         } catch (InvalidTokenException e) {
-            e.printStackTrace();
+            sendToClient(ErrorTypes.token_is_invalid.getErrorMessage());
         }
     }
 
@@ -159,7 +179,6 @@ public class Controller {
         userRepository.save(sourceUser);
         receiptRepository.save(receipt);
         sendToClient("done successfully");
-
     }
 
     public void move(Receipt receipt) throws IOException {
@@ -193,11 +212,10 @@ public class Controller {
             }
             sendToClient("" + user.getCredit());
         } catch (TokenExpiredException e) {
-            e.printStackTrace();
+            sendToClient(ErrorTypes.token_expired.getErrorMessage());
         } catch (InvalidTokenException e) {
-            e.printStackTrace();
+            sendToClient(ErrorTypes.token_is_invalid.getErrorMessage());
         }
-
     }
 
     public void exit(String token) {
