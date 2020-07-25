@@ -42,6 +42,10 @@ public class Session {
         return tokenStatus.Fine;
     }
 
+    public static String getUsernameByToken(String token) {
+        return allTokens.get(token);
+    }
+
     public static int getAccountNumber() {
         return accountNumber++;
     }
