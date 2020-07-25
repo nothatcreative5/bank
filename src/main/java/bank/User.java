@@ -65,4 +65,15 @@ public class User {
     public void setAccountNumber(int accountNumber) {
         this.accountNumber = accountNumber;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass().equals(this.getClass())) {
+            if (((User) obj).accountNumber == this.accountNumber) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
 }

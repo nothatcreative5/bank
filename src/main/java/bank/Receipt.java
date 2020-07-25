@@ -70,7 +70,19 @@ public class Receipt {
     public void setReceiptId(int receiptId) {
         this.receiptId = receiptId;
     }
-    public boolean getPaid(){
+
+    public boolean getPaid() {
         return paid;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass().equals(this.getClass())) {
+            if (((Receipt) obj).receiptId == this.receiptId) {
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 }
