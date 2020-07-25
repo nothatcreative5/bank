@@ -33,9 +33,11 @@ public class Controller {
             User user = getUserByUserName(userName);
             if (user != null) {
                 sendToClient(ErrorTypes.username_is_taken.getErrorMessage());
+                return;
             }
             if (!password.equals(repeatedPassword)) {
                 sendToClient(ErrorTypes.password_not_matches.getErrorMessage());
+                return;
             }
             User newUser = new User(userName, password, firstName, lastName, 0);
             userRepository.save(newUser);
