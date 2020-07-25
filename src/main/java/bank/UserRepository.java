@@ -40,9 +40,9 @@ public class UserRepository implements Repository<User> {
             file.createNewFile();
             Files.writeString(file.toPath(), gson.toJson(user));
             allUsers.put(user, file);
-            for (User user1 : allUsers.keySet()) {
+          /*  for (User user1 : allUsers.keySet()) {
                 System.out.println(user1.getUsername());
-            }
+            }*/
         }
     }
 
