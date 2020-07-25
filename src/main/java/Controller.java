@@ -42,7 +42,6 @@ public class Controller {
 
     public void exit(String token) {
 
-
     }
 
     private User getUserByToken(String token) {
