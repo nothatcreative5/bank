@@ -85,8 +85,7 @@ public class Controller {
 
             Receipt receipt = new Receipt(receiptType, money, source, dest, description);
             receiptRepository.save(receipt);
-            //TODO send succes
-            // sendToClient();
+            sendToClient("" + receipt.getReceiptId());
         } catch (TokenExpiredException e) {
             sendToClient(ErrorTypes.token_expired.getErrorMessage());
         } catch (InvalidTokenException e) {
@@ -104,7 +103,7 @@ public class Controller {
                 return;
             }
             try {
-                int receiptId = Integer.parseInt(transactionType);
+                Integer.parseInt(transactionType);
                 message = receiptRepository.getTransaction(user, transactionType);
             } catch (NumberFormatException e) {
                 if (!transactionType.equals("+") && !transactionType.equals("-") && !transactionType.equals("*")) {
@@ -218,7 +217,7 @@ public class Controller {
         }
     }
 
-    public void exit(String token) {
+    public void exit() {
 //todo
     }
 
