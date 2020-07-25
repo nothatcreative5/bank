@@ -16,6 +16,11 @@ public class Controller {
     }
 
     public void createAccount(String firstName, String lastName, String userName ,String password, String repeatedPassword) {
+        User user = getUserByUserName(userName);
+        if(user != null){
+            sendToClient(ErrorTypes.);
+        }
+
 
     }
 
@@ -51,6 +56,9 @@ public class Controller {
 
     private User getUserByAccountId(int accountId) {
         return null;
+    }
+    private User getUserByUserName(String userName){
+
     }
 
     public void sendToClient(String message) {
