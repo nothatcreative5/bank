@@ -5,7 +5,7 @@ public class Session {
 
     static{
         tokenCount = 1;
-        accountNumber = userRepository.getLatestAccountNumber() + 1;
+        accountNumber = UserRepository.getLatestAccountNumber() + 1;
     }
 
     public static String getToken() {

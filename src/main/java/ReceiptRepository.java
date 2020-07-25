@@ -7,22 +7,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class UserRepository implements Repository<User> {
+public class ReceiptRepository implements Repository<Receipt> {
 
-    private static int accountNumber;
-    private List<User> allUsers;
+    List<Receipt> allReceipts;
 
-    public UserRepository() throws IOException {
-        allUsers = new ArrayList<User>();
+    public ReceiptRepository() throws IOException {
+        allReceipts = new ArrayList<>();
         readFiles();
     }
 
     @Override
-    public void save(User user) throws IOException {
-        allUsers.add(user);
+    public void save(Receipt receipt) throws IOException {
+        allReceipts.add(receipt);
         File file = new File("\\database\\users");
         Gson gson = new Gson();
-        Files.writeString(file.toPath(), gson.toJson(user));
+        Files.writeString(file.toPath(), gson.toJson(receipt));
     }
 
 
@@ -35,9 +34,7 @@ public class UserRepository implements Repository<User> {
 
 
     private void readFiles() throws IOException {
-        List<File> files =  Arrays.asList(loadFolder("\\database\\users"));
-        Gson gson = new Gson();
-        accountNumber = gson.fromJson(Files.readString(files.get(files.size() - 1).toPath()), User.class).getAccountNumber() + 1;
+        List<File> files =  Arrays.asList(loadFolder("\\database\\receipts"));
         files.forEach(e -> {
             try {
                 readEachUser(e);
@@ -47,14 +44,10 @@ public class UserRepository implements Repository<User> {
         });
     }
 
+
     private void readEachUser(File file) throws IOException {
         Gson gson = new Gson();
-        User user = gson.fromJson(Files.readString(file.toPath()), User.class);
-        allUsers.add(user);
+        Receipt receipt = gson.fromJson(Files.readString(file.toPath()), Receipt.class);
+        allReceipts.add(receipt);
     }
-
-    public static int getLatestAccountNumber() {
-        return accountNumber;
-    }
-
 }
