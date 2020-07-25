@@ -8,15 +8,16 @@ public class Controller {
     private DataOutputStream dataOutputStream;
     private DataInputStream dateInputStream;
     private Socket clientSocket;
+    private Object lock;
 
-    public Controller(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket) {
+    public Controller(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket, Object lock) {
         this.dataOutputStream = dataOutputStream;
         this.dateInputStream = dataInputStream;
         this.clientSocket = clientSocket;
+        this.lock = lock;
     }
 
     public void createAccount(String firstName, String lastName, String userName, String password, String repeatedPassword) {
-        synchronized ()
         User user = getUserByUserName(userName);
         if (user != null) {
             sendToClient(ErrorTypes.username_is_taken.getErrorMessage());
@@ -25,7 +26,6 @@ public class Controller {
             sendToClient(ErrorTypes.password_not_matches.getErrorMessage());
         }
         User newUser = new User(userName, password, firstName, lastName, 0);
-
     }
 
     public void getToken(String userName, String password) {

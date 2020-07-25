@@ -28,19 +28,14 @@ public class UserRepository implements Repository<User> {
 
 
     @Override
-    public synchronized void save(User user) throws IOException, UsernameIsTakenException {
-        List<User> usernameCheck = (List<User>) allUsers.keySet();
-        for (User username : usernameCheck) {
-            if (username.getUsername().equals(user.getUsername()))
-                throw new UsernameIsTakenException("Sorry, But the username you have chosen is already taken.");
-        }
+    public synchronized void save(User user) throws IOException {
         Gson gson = new Gson();
         if (allUsers.keySet().contains(user)) {
             Files.writeString(Paths.get(allUsers.get(user) + "\\" + user.getAccountNumber()), gson.toJson(user));
         } else {
             File file = new File("\\database\\users");
             Files.writeString(Paths.get(file.toPath() + "\\" + user.getAccountNumber()), gson.toJson(user));
-            allUsers.put(user, file);
+            allUsers.put(user,file);
         }
     }
 
