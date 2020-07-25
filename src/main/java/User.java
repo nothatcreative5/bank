@@ -4,7 +4,7 @@ public class User {
     private String password;
     private String firstName;
     private String lastName;
-    private int accountNumber; //todo
+    private int accountNumber;
     private int credit;
 
     public User(String username, String password, String firstName, String lastName, int credit) {
@@ -13,6 +13,7 @@ public class User {
         this.firstName = firstName;
         this.firstName = lastName;
         this.credit = credit;
+        this.accountNumber = Session.getAccountNumber();
     }
 
     public String getUsername() {
@@ -53,5 +54,13 @@ public class User {
 
     public void setCredit(int credit) {
         this.credit = credit;
+    }
+
+    public int getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(int accountNumber) {
+        this.accountNumber = accountNumber;
     }
 }
