@@ -72,4 +72,20 @@ public class UserRepository implements Repository<User> {
         return accountNumber;
     }
 
+    public User getUserByUsername(String username) {
+        for (User user : allUsers.keySet()) {
+            if(user.getUsername().equals(username))
+                return user;
+        }
+        return null;
+    }
+
+    public User getUserByAccountId(int accountId) {
+        for (User user : allUsers.keySet()) {
+            if(user.getAccountNumber() == accountId)
+                return user;
+        }
+        return null;
+    }
+
 }
