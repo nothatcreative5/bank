@@ -66,23 +66,22 @@ public class Controller {
             }
             User sourceAccount = getUserByAccountId(source);
             if (sourceAccount == null) {
-                sendToClient("source account id is invalid");
-                return;
+                if (source != -1) {
+                    sendToClient("source account id is invalid");
+                    return;
+                }
             }
             User destAccount = getUserByAccountId(dest);
             if (destAccount == null) {
-                sendToClient("dest account id is invalid");
-                return;
+                if (dest != -1) {
+                    sendToClient("dest account id is invalid");
+                    return;
+                }
             }
-            if (destAccount.equals(sourceAccount)) {
+            if (source == dest) {
                 sendToClient("equal source and dest account");
                 return;
             }
-            if (source == -1 || dest == -1) {
-                sendToClient("invalid account id");
-                return;
-            }
-
             Receipt receipt = new Receipt(receiptType, money, source, dest, description);
             receiptRepository.save(receipt);
             sendToClient("" + receipt.getReceiptId());
