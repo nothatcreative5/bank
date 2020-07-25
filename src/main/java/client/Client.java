@@ -1,8 +1,6 @@
 package client;
 
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -17,8 +15,10 @@ public class Client {
             command = scanner.nextLine();
             socket = new Socket("localhost", bankPort);
             DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             dataOutputStream.writeUTF(command);
             dataOutputStream.flush();
+            System.out.println(dataInputStream.readUTF());
             socket.close();
         }
     }
