@@ -13,6 +13,7 @@ public class ReceiptRepository implements Repository<Receipt> {
 
     private List<Receipt> allReceipts;
     private static ReceiptRepository instance;
+    private static int receiptNumber;
 
 
     public static ReceiptRepository getInstance() throws IOException {
@@ -47,6 +48,8 @@ public class ReceiptRepository implements Repository<Receipt> {
 
     private void readFiles() throws IOException {
         List<File> files =  Arrays.asList(loadFolder("\\database\\receipts"));
+        Gson gson = new Gson();
+        receiptNumber = gson.fromJson(Files.readString(files.get(files.size() - 1).toPath()), Receipt.class).getReceiptId() + 1;
         files.forEach(e -> {
             try {
                 readEachUser(e);
@@ -54,6 +57,57 @@ public class ReceiptRepository implements Repository<Receipt> {
                 ioException.printStackTrace();
             }
         });
+    }
+
+    public String getTransaction(User user , String transactionType) {
+        switch (transactionType) {
+            case "+":
+                return destTransaction(user);
+            case "-":
+                return sourceTransaction(user);
+            case "*":
+                return getAllTransactions(user);
+            default:
+                return getBasedOnNumber(transactionType);
+        }
+    }
+
+    private String getBasedOnNumber(String transactionType) {
+        int id = Integer.parseInt(transactionType);
+        Gson gson = new Gson();
+        for (Receipt receipt : allReceipts) {
+            if(receipt.getReceiptId() == id)
+                return gson.toJson(receipt);
+        }
+        return null;
+    }
+
+    private String getAllTransactions(User user) {
+        return sourceTransaction(user) + destTransaction(user);
+    }
+
+    private String sourceTransaction(User user) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Gson gson = new Gson();
+        for (Receipt receipt : allReceipts) {
+            if(user.getAccountNumber() == receipt.getSourceId()) {
+                stringBuilder.append(gson.toJson(receipt));
+                stringBuilder.append("*");
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    private String destTransaction(User user) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Gson gson = new Gson();
+        for (Receipt receipt : allReceipts) {
+            if(user.getAccountNumber() == receipt.getDestId()) {
+                stringBuilder.append(gson.toJson(receipt));
+                stringBuilder.append("*");
+            }
+        }
+        return stringBuilder.toString();
     }
 
 

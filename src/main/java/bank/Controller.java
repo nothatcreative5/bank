@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import
 import bank.exception.InvalidTokenException;
 import bank.exception.TokenExpiredException;
 
@@ -94,7 +93,7 @@ public class Controller {
     }
 
     public void getTransaction(String token, String transactionType) {
-
+        isTokenValid(token);
     }
 
     public void pay(int id) {
