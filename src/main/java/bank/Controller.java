@@ -123,15 +123,19 @@ public class Controller {
     }
 
     private User getUserByToken(String token) {
-        return null;
+        String username = Session.getUsernameByToken(token);
+        if(username == null)
+            return null;
+        else
+            return userRepository.getUserByUsername(username);
     }
 
     private User getUserByAccountId(int accountId) {
-        return null;
+        return userRepository.getUserByAccountId(accountId);
     }
 
     private User getUserByUserName(String userName) {
-
+        return userRepository.getUserByUsername(userName);
     }
 
     public void sendToClient(String message) {
