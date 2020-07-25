@@ -19,7 +19,7 @@ public class Session {
         allTokens = new ArrayList<>();
     }
 
-    public static String getToken() {
+    public static synchronized String getToken() {
         String returnValue = "a" + tokenCount;
         allTokens.add(returnValue);
         TimerTask task = new TimerTask() {

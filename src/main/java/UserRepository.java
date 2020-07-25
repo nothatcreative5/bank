@@ -4,35 +4,39 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class UserRepository implements Repository<User> {
 
     private static int accountNumber;
-    private List<User> allUsers;
+    // private List<User> allUsers;
+    private Map<User, File> allUsers;
     private static UserRepository instance;
 
     public static UserRepository getInstance() throws IOException {
-        if(instance == null)
+        if (instance == null)
             return new UserRepository();
         else
             return instance;
     }
 
     private UserRepository() throws IOException {
-        allUsers = new ArrayList<User>();
+        allUsers = new HashMap<>();
         readFiles();
     }
 
 
     @Override
     public synchronized void save(User user) throws IOException {
-        allUsers.add(user);
-        File file = new File("\\database\\users");
         Gson gson = new Gson();
-        Files.writeString(Paths.get(file.toPath() + "\\" + user.getAccountNumber()), gson.toJson(user));
+        if (allUsers.keySet().contains(user)) {
+            Files.writeString(Paths.get(allUsers.get(user) + "\\" + user.getAccountNumber()), gson.toJson(user));
+        } else {
+            File file = new File("\\database\\users");
+            Files.writeString(Paths.get(file.toPath() + "\\" + user.getAccountNumber()), gson.toJson(user));
+            allUsers.put(user,file);
+        }
     }
 
 
@@ -45,7 +49,7 @@ public class UserRepository implements Repository<User> {
 
 
     private void readFiles() throws IOException {
-        List<File> files =  Arrays.asList(loadFolder("\\database\\users"));
+        List<File> files = Arrays.asList(loadFolder("\\database\\users"));
         Gson gson = new Gson();
         accountNumber = gson.fromJson(Files.readString(files.get(files.size() - 1).toPath()), User.class).getAccountNumber() + 1;
         files.forEach(e -> {
@@ -60,7 +64,7 @@ public class UserRepository implements Repository<User> {
     private void readEachUser(File file) throws IOException {
         Gson gson = new Gson();
         User user = gson.fromJson(Files.readString(file.toPath()), User.class);
-        allUsers.add(user);
+        allUsers.put(user, file);
     }
 
     public static int getLatestAccountNumber() {
