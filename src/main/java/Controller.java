@@ -17,7 +17,6 @@ public class Controller {
 
     public void createAccount(String token, String firstName, String lastName, String password, String repeatedPassword) {
 
-
     }
 
     public void getToken(String userName, String password) {
