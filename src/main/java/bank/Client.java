@@ -54,7 +54,7 @@ public class Client extends Thread {
         } else if (command.matches(Constants.EXIT)) {
             Matcher matcher = Pattern.compile(Constants.EXIT).matcher(command);
             matcher.find();
-            controller.exit(matcher.group(1));
+            controller.exit();
         } else {
             controller.sendToClient("invalid input");
         }
