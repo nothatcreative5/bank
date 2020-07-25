@@ -1,14 +1,11 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class Session {
 
     static int tokenCount;
     static int accountNumber;
     private static List<String> expiredTokens;
-    private static List<String> allTokens;
+    private static Map<String, String> allTokens; //Token first Username second
 
     private enum tokenStatus {Invalid, Expired, Fine}
 
@@ -16,12 +13,12 @@ public class Session {
         tokenCount = 1;
         accountNumber = UserRepository.getLatestAccountNumber() + 1;
         expiredTokens = new ArrayList<>();
-        allTokens = new ArrayList<>();
+        allTokens = new HashMap<>();
     }
 
-    public static synchronized String getToken() {
+    public static synchronized String getToken(String username) {
         String returnValue = "a" + tokenCount;
-        allTokens.add(returnValue);
+        allTokens.put(returnValue, username);
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
@@ -38,7 +35,7 @@ public class Session {
     public static tokenStatus isTokenExpired(String token) {
         if (expiredTokens.contains(token))
             return tokenStatus.Expired;
-        else if (!allTokens.contains(token))
+        else if (!allTokens.keySet().contains(token))
             return tokenStatus.Invalid;
         return tokenStatus.Fine;
     }

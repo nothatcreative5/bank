@@ -9,9 +9,9 @@ public class Client extends Thread {
     private DataInputStream dateInputStream;
     private Controller controller;
 
-    public Client(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket) {
+    public Client(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket, Object lock) {
         this.dateInputStream = dataInputStream;
-        controller = new Controller(dataOutputStream, dataInputStream, clientSocket);
+        controller = new Controller(dataOutputStream, dataInputStream, clientSocket, lock);
     }
 
     @Override

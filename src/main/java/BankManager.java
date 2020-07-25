@@ -4,6 +4,11 @@ import java.net.Socket;
 
 public class BankManager {
     private ServerSocket serverSocket;
+    private static Object lock;
+
+    static{
+        lock = new Object();
+    }
 
     public BankManager() throws IOException {
         serverSocket = new ServerSocket(Constants.port);
@@ -16,7 +21,7 @@ public class BankManager {
                 Socket clientSocket = serverSocket.accept();
                 DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
                 DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
-                new Client(dataOutputStream, dataInputStream, clientSocket).start();
+                new Client(dataOutputStream, dataInputStream, clientSocket,lock).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
