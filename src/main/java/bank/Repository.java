@@ -1,3 +1,5 @@
+package bank;
+
 import java.io.IOException;
 
 public interface Repository<T> {

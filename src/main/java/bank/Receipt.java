@@ -1,29 +1,21 @@
-import java.io.Reader;
+package bank;
 
 public class Receipt {
 
-    private String token;
     private Receipt_type receipt_type;
-    private int money;
+    private long money;
     private String sourceId;
     private String destId;
     private String description;
 
-    public Receipt(String token, Receipt_type receipt_type, int money, String sourceId, String destId) {
-        this.token = token;
+    public Receipt(Receipt_type receipt_type, long money, String sourceId, String destId,String description) {
         this.receipt_type = receipt_type;
         this.money = money;
         this.sourceId = sourceId;
         this.destId = destId;
+        this.description = description;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public Receipt_type getReceipt_type() {
         return receipt_type;

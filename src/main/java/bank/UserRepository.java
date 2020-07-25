@@ -1,3 +1,5 @@
+package bank;
+
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -5,12 +7,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Pattern;
 
 public class UserRepository implements Repository<User> {
 
     private static int accountNumber;
-    // private List<User> allUsers;
+    // private List<bank.User> allUsers;
     private Map<User, File> allUsers;
     private static UserRepository instance;
 
