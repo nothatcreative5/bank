@@ -20,10 +20,10 @@ public class Controller {
         this.dataOutputStream = dataOutputStream;
         this.dateInputStream = dataInputStream;
         this.clientSocket = clientSocket;
+
     }
 
     public void createAccount(String token,String userName,String password,String firstName,String lastName){
-
 
     }
     public void getToken(String userName,String password){

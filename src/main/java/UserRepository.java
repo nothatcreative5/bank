@@ -3,6 +3,7 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,18 +12,27 @@ public class UserRepository implements Repository<User> {
 
     private static int accountNumber;
     private List<User> allUsers;
+    private static UserRepository instance;
 
-    public UserRepository() throws IOException {
+    public static UserRepository getInstance() throws IOException {
+        if(instance == null)
+            return new UserRepository();
+        else
+            return instance;
+    }
+
+    private UserRepository() throws IOException {
         allUsers = new ArrayList<User>();
         readFiles();
     }
 
+
     @Override
-    public void save(User user) throws IOException {
+    public synchronized void save(User user) throws IOException {
         allUsers.add(user);
         File file = new File("\\database\\users");
         Gson gson = new Gson();
-        Files.writeString(file.toPath(), gson.toJson(user));
+        Files.writeString(Paths.get(file.toPath() + "\\" + user.getAccountNumber()), gson.toJson(user));
     }
 
 

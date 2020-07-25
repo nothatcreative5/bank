@@ -9,15 +9,25 @@ import java.util.List;
 
 public class ReceiptRepository implements Repository<Receipt> {
 
-    List<Receipt> allReceipts;
+    private List<Receipt> allReceipts;
+    private static ReceiptRepository instance;
 
-    public ReceiptRepository() throws IOException {
+
+    public static ReceiptRepository getInstance() throws IOException {
+        if(instance == null)
+            return new ReceiptRepository();
+        else
+            return instance;
+    }
+
+    private ReceiptRepository() throws IOException {
         allReceipts = new ArrayList<>();
         readFiles();
+        this.instance = this;
     }
 
     @Override
-    public void save(Receipt receipt) throws IOException {
+    public synchronized void save(Receipt receipt) throws IOException {
         allReceipts.add(receipt);
         File file = new File("\\database\\users");
         Gson gson = new Gson();
