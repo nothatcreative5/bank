@@ -54,7 +54,7 @@ public class User {
         return credit;
     }
 
-    public void setCredit(int credit) {
+    public void setCredit(long credit) {
         this.credit = credit;
     }
 

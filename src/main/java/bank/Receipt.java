@@ -7,6 +7,7 @@ public class Receipt {
     private String sourceId;
     private String destId;
     private String description;
+    private boolean paid ;
 
     public Receipt(Receipt_type receipt_type, long money, String sourceId, String destId, String description) {
         this.receipt_type = receipt_type;
@@ -14,8 +15,15 @@ public class Receipt {
         this.sourceId = sourceId;
         this.destId = destId;
         this.description = description;
+        paid = false;
+    }
+    public boolean getPaid(){
+        return paid;
     }
 
+    public void setPaid(boolean paid) {
+        this.paid = paid;
+    }
 
     public Receipt_type getReceipt_type() {
         return receipt_type;

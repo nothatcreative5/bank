@@ -7,9 +7,11 @@ import java.net.Socket;
 public class BankManager {
     private ServerSocket serverSocket;
     private static Object lock;
+    private static Object payingLock;
 
     static{
         lock = new Object();
+        payingLock = new Object();
     }
 
     public BankManager() throws IOException {
@@ -23,7 +25,7 @@ public class BankManager {
                 Socket clientSocket = serverSocket.accept();
                 DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
                 DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
-                new Client(dataOutputStream, dataInputStream, clientSocket,lock).start();
+                new Client(dataOutputStream, dataInputStream, clientSocket,lock,payingLock).start();
             } catch (IOException e) {
                 e.printStackTrace();
             }

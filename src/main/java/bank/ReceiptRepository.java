@@ -16,7 +16,7 @@ public class ReceiptRepository implements Repository<Receipt> {
 
 
     public static ReceiptRepository getInstance() throws IOException {
-        if(instance == null)
+        if (instance == null)
             return new ReceiptRepository();
         else
             return instance;
@@ -46,7 +46,7 @@ public class ReceiptRepository implements Repository<Receipt> {
 
 
     private void readFiles() throws IOException {
-        List<File> files =  Arrays.asList(loadFolder("\\database\\receipts"));
+        List<File> files = Arrays.asList(loadFolder("\\database\\receipts"));
         files.forEach(e -> {
             try {
                 readEachUser(e);
@@ -61,5 +61,10 @@ public class ReceiptRepository implements Repository<Receipt> {
         Gson gson = new Gson();
         Receipt receipt = gson.fromJson(Files.readString(file.toPath()), Receipt.class);
         allReceipts.add(receipt);
+    }
+
+    public Receipt getById(int id) {
+
+
     }
 }

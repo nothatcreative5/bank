@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import
 import bank.exception.InvalidTokenException;
 import bank.exception.TokenExpiredException;
 
@@ -14,13 +13,15 @@ public class Controller {
     private DataInputStream dateInputStream;
     private Socket clientSocket;
     private Object lock;
+    private Object payingLock;
     private UserRepository userRepository;
     private ReceiptRepository receiptRepository;
 
-    public Controller(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket, Object lock) throws IOException {
+    public Controller(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket, Object lock, Object payingLock) throws IOException {
         this.dataOutputStream = dataOutputStream;
         this.dateInputStream = dataInputStream;
         this.clientSocket = clientSocket;
+        this.payingLock = payingLock;
         this.lock = lock;
         userRepository = UserRepository.getInstance();
         receiptRepository = ReceiptRepository.getInstance();
@@ -97,8 +98,82 @@ public class Controller {
 
     }
 
-    public void pay(int id) {
+    public void pay(int id) throws IOException {
+        synchronized (payingLock) {
+            Receipt receipt = receiptRepository.getById(id);
+            if (receipt == null) {
+                sendToClient("invalid receipt id");
+                return;
+            }
+            if (receipt.getPaid()) {
+                sendToClient("receipt is paid before");
+                return;
+            }
+            switch (receipt.getReceipt_type()) {
+                case withdraw:
+                    withDraw(receipt);
+                    return;
+                case move:
+                    move(receipt);
+                    return;
+                case deposit:
+                    deposit(receipt);
+            }
+        }
+    }
 
+    public void withDraw(Receipt receipt) {
+        User destUser = getUserByAccountId(receipt.getDestId());
+        long money = receipt.getMoney();
+        if (destUser == null) {
+            sendToClient("invalid account id");
+            return;
+        }
+        if (destUser.getCredit() <= money) {
+            sendToClient("dest account does not have enough money");
+            return;
+        }
+        destUser.setCredit(destUser.getCredit() - money);
+        receipt.setPaid(true);
+        userRepository.save(destUser);
+        receiptRepository.save(receipt);
+        sendToClient("done successfully");
+    }
+
+    public void deposit(Receipt receipt) throws IOException {
+        User sourceUser = getUserByAccountId(receipt.getSourceId());
+        long money = receipt.getMoney();
+        if (sourceUser == null) {
+            sendToClient("invalid account id");
+            return;
+        }
+        sourceUser.setCredit(sourceUser.getCredit() + money);
+        receipt.setPaid(true);
+        userRepository.save(sourceUser);
+        receiptRepository.save(receipt);
+        sendToClient("done successfully");
+
+    }
+
+    public void move(Receipt receipt) throws IOException {
+        User sourceUser = getUserByAccountId(receipt.getSourceId());
+        User destUser = getUserByAccountId(receipt.getDestId());
+        long money = receipt.getMoney();
+        if (sourceUser == null || destUser == null) {
+            sendToClient("invalid account id");
+            return;
+        }
+        if (sourceUser.getCredit() <= money) {
+            sendToClient("source account does not have enough money");
+            return;
+        }
+        sourceUser.setCredit(sourceUser.getCredit() - money);
+        destUser.setCredit(destUser.getCredit() + money);
+        receipt.setPaid(true);
+        userRepository.save(sourceUser);
+        userRepository.save(destUser);
+        receiptRepository.save(receipt);
+        sendToClient("done successfully");
     }
 
     public void getBalance(String token) {
@@ -124,7 +199,7 @@ public class Controller {
 
     private User getUserByToken(String token) {
         String username = Session.getUsernameByToken(token);
-        if(username == null)
+        if (username == null)
             return null;
         else
             return userRepository.getUserByUsername(username);

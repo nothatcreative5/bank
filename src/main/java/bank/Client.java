@@ -11,9 +11,9 @@ public class Client extends Thread {
     private DataInputStream dateInputStream;
     private Controller controller;
 
-    public Client(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket, Object lock) throws IOException {
+    public Client(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket, Object lock,Object payingLock) throws IOException {
         this.dateInputStream = dataInputStream;
-        controller = new Controller(dataOutputStream, dataInputStream, clientSocket, lock);
+        controller = new Controller(dataOutputStream, dataInputStream, clientSocket, lock,payingLock);
     }
 
     @Override
