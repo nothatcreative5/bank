@@ -8,27 +8,31 @@ public class Controller {
     private DataOutputStream dataOutputStream;
     private DataInputStream dateInputStream;
     private Socket clientSocket;
+    private UserRepository userRepository;
 
-    public Controller(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket) {
+    public Controller(DataOutputStream dataOutputStream, DataInputStream dataInputStream, Socket clientSocket) throws IOException {
         this.dataOutputStream = dataOutputStream;
         this.dateInputStream = dataInputStream;
         this.clientSocket = clientSocket;
+        userRepository = UserRepository.getInstance();
     }
 
-    public void createAccount(String firstName, String lastName, String userName, String password, String repeatedPassword) {
-        synchronized ()
-        User user = getUserByUserName(userName);
-        if (user != null) {
-            sendToClient(ErrorTypes.username_is_taken.getErrorMessage());
-        }
+    public void createAccount(String firstName, String lastName, String userName, String password, String repeatedPassword) throws IOException {
         if (!password.equals(repeatedPassword)) {
             sendToClient(ErrorTypes.password_not_matches.getErrorMessage());
         }
         User newUser = new User(userName, password, firstName, lastName, 0);
+        try {
 
+            userRepository.save(newUser);
+            sendToClient("" + newUser.getAccountNumber());
+        }catch (){
+
+        }
     }
 
     public void getToken(String userName, String password) {
+
 
     }
 
