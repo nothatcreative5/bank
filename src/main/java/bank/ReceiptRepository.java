@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -12,11 +13,11 @@ public class ReceiptRepository implements Repository<Receipt> {
 
     private Map<Receipt, File> allReceipts;
     private static ReceiptRepository instance;
-    private static int receiptNumber;
+    private static int receiptNumber = 1;
 
 
     public static ReceiptRepository getInstance() throws IOException {
-        if(instance == null)
+        if (instance == null)
             return new ReceiptRepository();
         else
             return instance;
@@ -50,9 +51,15 @@ public class ReceiptRepository implements Repository<Receipt> {
 
 
     private void readFiles() throws IOException {
-        List<File> files =  Arrays.asList(loadFolder("\\database\\receipts"));
+        File[] fileArray = loadFolder("database\\receipts");
+        List<File> files;
+        if (fileArray == null)
+            files = new ArrayList<>();
+        else
+            files = Arrays.asList(fileArray);
         Gson gson = new Gson();
-        receiptNumber = gson.fromJson(Files.readString(files.get(files.size() - 1).toPath()), Receipt.class).getReceiptId() + 1;
+        if (files.size() != 0)
+            receiptNumber = gson.fromJson(Files.readString(files.get(files.size() - 1).toPath()), Receipt.class).getReceiptId() + 1;
         files.forEach(e -> {
             try {
                 readEachUser(e);
@@ -62,7 +69,7 @@ public class ReceiptRepository implements Repository<Receipt> {
         });
     }
 
-    public String getTransaction(User user , String transactionType) {
+    public String getTransaction(User user, String transactionType) {
         switch (transactionType) {
             case "+":
                 return destTransaction(user);
@@ -79,7 +86,7 @@ public class ReceiptRepository implements Repository<Receipt> {
         int id = Integer.parseInt(transactionType);
         Gson gson = new Gson();
         for (Receipt receipt : allReceipts.keySet()) {
-            if(receipt.getReceiptId() == id)
+            if (receipt.getReceiptId() == id)
                 return gson.toJson(receipt);
         }
         return null;
@@ -93,7 +100,7 @@ public class ReceiptRepository implements Repository<Receipt> {
         StringBuilder stringBuilder = new StringBuilder();
         Gson gson = new Gson();
         for (Receipt receipt : allReceipts.keySet()) {
-            if(user.getAccountNumber() == receipt.getSourceId()) {
+            if (user.getAccountNumber() == receipt.getSourceId()) {
                 stringBuilder.append(gson.toJson(receipt));
                 stringBuilder.append("*");
             }
@@ -105,7 +112,7 @@ public class ReceiptRepository implements Repository<Receipt> {
         StringBuilder stringBuilder = new StringBuilder();
         Gson gson = new Gson();
         for (Receipt receipt : allReceipts.keySet()) {
-            if(user.getAccountNumber() == receipt.getDestId()) {
+            if (user.getAccountNumber() == receipt.getDestId()) {
                 stringBuilder.append(gson.toJson(receipt));
                 stringBuilder.append("*");
             }
@@ -115,7 +122,7 @@ public class ReceiptRepository implements Repository<Receipt> {
 
     public Receipt getReceiptById(int id) {
         for (Receipt receipt : allReceipts.keySet()) {
-            if(receipt.getReceiptId() == id)
+            if (receipt.getReceiptId() == id)
                 return receipt;
         }
         return null;

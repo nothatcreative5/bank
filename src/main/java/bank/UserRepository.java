@@ -10,7 +10,7 @@ import java.util.*;
 
 public class UserRepository implements Repository<User> {
 
-    private static int accountNumber;
+    private static int accountNumber = 1;
     // private List<bank.User> allUsers;
     private Map<User, File> allUsers;
     private static UserRepository instance;
@@ -34,8 +34,9 @@ public class UserRepository implements Repository<User> {
         if (allUsers.keySet().contains(user)) {
             Files.writeString(Paths.get(allUsers.get(user) + "\\" + user.getAccountNumber()), gson.toJson(user));
         } else {
-            File file = new File("\\database\\users");
-            Files.writeString(Paths.get(file.toPath() + "\\" + user.getAccountNumber()), gson.toJson(user));
+            File file = new File("database\\users\\" + user.getAccountNumber());
+            file.createNewFile();
+            Files.writeString(file.toPath(), gson.toJson(user));
             allUsers.put(user, file);
         }
     }
@@ -50,9 +51,15 @@ public class UserRepository implements Repository<User> {
 
 
     private void readFiles() throws IOException {
-        List<File> files = Arrays.asList(loadFolder("\\database\\users"));
+        File[] fileArray = loadFolder("database\\users");
+        List<File> files;
+        if (fileArray == null)
+            files = new ArrayList<>();
+        else
+            files = Arrays.asList(fileArray);
         Gson gson = new Gson();
-        accountNumber = gson.fromJson(Files.readString(files.get(files.size() - 1).toPath()), User.class).getAccountNumber() + 1;
+        if (files.size() != 0)
+            accountNumber = gson.fromJson(Files.readString(files.get(files.size() - 1).toPath()), User.class).getAccountNumber() + 1;
         files.forEach(e -> {
             try {
                 readEachUser(e);
